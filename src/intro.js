@@ -19,6 +19,8 @@ export function calculateAverage(numbers) {
 
 export function factorialV1(number) {
   const tempFactorial = [];
+  if (number < 0) return;
+
   if (number === 0 || number === 1) {
     return 1;
   }
@@ -28,4 +30,12 @@ export function factorialV1(number) {
   }
 
   return (tempFactorial[number] = factorialV1(number - 1) * number);
+}
+
+export function factorialV2(n) {
+  if (n < 0) return;
+
+  if (n === 0 || n === 1) return 1;
+
+  return n * factorialV2(n - 1);
 }
