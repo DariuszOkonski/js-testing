@@ -16,3 +16,16 @@ export function calculateAverage(numbers) {
   const sum = numbers.reduce((sum, current) => sum + current, 0);
   return sum / numbers.length;
 }
+
+export function factorialV1(number) {
+  const tempFactorial = [];
+  if (number === 0 || number === 1) {
+    return 1;
+  }
+
+  if (tempFactorial[number] > 0) {
+    return tempFactorial[number];
+  }
+
+  return (tempFactorial[number] = factorialV1(number - 1) * number);
+}
