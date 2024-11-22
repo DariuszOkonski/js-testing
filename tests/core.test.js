@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import { calculateDiscount, getCoupons } from '../src/core';
+import { calculateDiscount, getCoupons, validateUserInput } from '../src/core';
 
 describe('core test cases', () => {
   it('test case 1', () => {
@@ -113,5 +113,39 @@ describe('calculateDiscount', () => {
   it('should handle invalid discount code', () => {
     const result = calculateDiscount(10, 'INVALID');
     expect(result).toBe(10);
+  });
+});
+
+describe('validateUserInput', () => {
+  it('should return invalid username message if username is not a string', () => {
+    const result = validateUserInput(10, 20);
+    expect(result).toMatch(/invalid username/i);
+  });
+  it('should return invalid username message if username length less than 3', () => {
+    const result = validateUserInput('ab', 20);
+    expect(result).toMatch(/invalid username/i);
+  });
+  it('should return invalid age message if age not a number', () => {
+    const result = validateUserInput('john', '20');
+    expect(result).toMatch(/age/i);
+  });
+  it('should return invalid age message if age less than 18', () => {
+    const result = validateUserInput('john', 17);
+    expect(result).toMatch(/age/i);
+  });
+  it('should return invalid username and age if username not string and age not number', () => {
+    const result = validateUserInput(10, '10');
+    expect(result).toMatch(/invalid username/i);
+    expect(result).toMatch(/invalid age/i);
+  });
+  it('should return invalid username and age if username length less than 3 and age less 18', () => {
+    const result = validateUserInput('ab', 17);
+    expect(result).toMatch(/invalid username/i);
+    expect(result).toMatch(/invalid age/i);
+  });
+
+  it('should return valid message if number of errors equal 0', () => {
+    const result = validateUserInput('john', 18);
+    expect(result).toMatch(/successful/i);
   });
 });
