@@ -4,6 +4,7 @@ import {
   getCoupons,
   validateUserInput,
   isPriceInRange,
+  isValidUsername,
 } from '../src/core';
 
 describe('core test cases', () => {
@@ -203,5 +204,27 @@ describe('isPriceInRange', () => {
 
   it('should return true when the price is within the range', () => {
     expect(isPriceInRange(10, 0, 100)).toBe(true);
+  });
+});
+
+describe('isValidUsername v1', () => {
+  it('should return true if username length between min and max', () => {
+    expect(isValidUsername('maximilian')).toBe(true);
+  });
+
+  it('should return true if username length equal to min length', () => {
+    expect(isValidUsername('darek')).toBe(true);
+  });
+
+  it('should return true if username length equal to max length', () => {
+    expect(isValidUsername('darekDarekDarek')).toBe(true);
+  });
+
+  it('should return false if username less than min length', () => {
+    expect(isValidUsername('daro')).toBe(false);
+  });
+
+  it('should return false if username more than max length', () => {
+    expect(isValidUsername('darekDarekDarekD')).toBe(false);
   });
 });
