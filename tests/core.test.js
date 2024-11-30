@@ -5,6 +5,7 @@ import {
   validateUserInput,
   isPriceInRange,
   isValidUsername,
+  canDrive,
 } from '../src/core';
 
 describe('core test cases', () => {
@@ -256,5 +257,54 @@ describe('isValidUsername v2', () => {
     expect(isValidUsername('')).toBe(false);
     expect(isValidUsername(undefined)).toBe(false);
     expect(isValidUsername(1)).toBe(false);
+  });
+});
+
+describe('canDrive v1', () => {
+  it('should check if countryCode is valid', () => {
+    expect(canDrive(16, 'PL')).toMatch(/invalid/i);
+  });
+  it('should return false if age is less then 16 for US', () => {
+    expect(canDrive(15, 'US')).toBe(false);
+  });
+  it('should return true if age is equal min age for US', () => {
+    expect(canDrive(16, 'US')).toBe(true);
+  });
+  it('should return true if age is greater than min age for US', () => {
+    expect(canDrive(17, 'US')).toBe(true);
+  });
+  it('should return false if age is less then 17 for UK', () => {
+    expect(canDrive(16, 'UK')).toBe(false);
+  });
+  it('should return true if age is equal min age for UK', () => {
+    expect(canDrive(17, 'UK')).toBe(true);
+  });
+  it('should return true if age is greater than min age for UK', () => {
+    expect(canDrive(18, 'UK')).toBe(true);
+  });
+});
+
+describe('canDrive v2', () => {
+  it('should return error for invalid country code', () => {
+    expect(canDrive(20, 'FR')).toMatch(/invalid/i);
+  });
+  it('should return false for underage in the US', () => {
+    expect(canDrive(15, 'US')).toBe(false);
+  });
+  it('should return true for min age in the US', () => {
+    expect(canDrive(16, 'US')).toBe(true);
+  });
+  it('should return true for eligible in the US', () => {
+    expect(canDrive(17, 'US')).toBe(true);
+  });
+
+  it('should return false for underage in the UK', () => {
+    expect(canDrive(16, 'UK')).toBe(false);
+  });
+  it('should return true for min age in the UK', () => {
+    expect(canDrive(17, 'UK')).toBe(true);
+  });
+  it('should return true for eligible in the UK', () => {
+    expect(canDrive(18, 'UK')).toBe(true);
   });
 });
