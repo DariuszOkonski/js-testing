@@ -1,3 +1,5 @@
+//NODE 18.0.0
+
 // Exercise: Writing good assertions
 export function getCoupons() {
   return [
