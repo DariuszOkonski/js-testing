@@ -193,19 +193,32 @@ describe('validateUserInput v2', () => {
 });
 
 describe('isPriceInRange', () => {
-  it('should return false when the price is outside the range', () => {
-    expect(isPriceInRange(-10, 0, 100)).toBe(false);
-    expect(isPriceInRange(200, 0, 100)).toBe(false);
-  });
+  it.each([
+    { price: -10, min: 0, max: 100, result: false },
+    { price: 200, min: 0, max: 100, result: false },
+    { price: 0, min: 0, max: 100, result: true },
+    { price: 100, min: 0, max: 100, result: true },
+    { price: 10, min: 0, max: 100, result: true },
+  ])(
+    'should return $result when the price $price between (min: $min, max: $max)',
+    ({ price, min, max, result }) => {
+      expect(isPriceInRange(price, min, max)).toBe(result);
+    }
+  );
 
-  it('should return true when the price is equal to the min or to the max', () => {
-    expect(isPriceInRange(0, 0, 100)).toBe(true);
-    expect(isPriceInRange(100, 0, 100)).toBe(true);
-  });
+  // it('should return false when the price is outside the range', () => {
+  //   expect(isPriceInRange(-10, 0, 100)).toBe(false);
+  //   expect(isPriceInRange(200, 0, 100)).toBe(false);
+  // });
 
-  it('should return true when the price is within the range', () => {
-    expect(isPriceInRange(10, 0, 100)).toBe(true);
-  });
+  // it('should return true when the price is equal to the min or to the max', () => {
+  //   expect(isPriceInRange(0, 0, 100)).toBe(true);
+  //   expect(isPriceInRange(100, 0, 100)).toBe(true);
+  // });
+
+  // it('should return true when the price is within the range', () => {
+  //   expect(isPriceInRange(10, 0, 100)).toBe(true);
+  // });
 });
 
 describe('isValidUsername v1', () => {
