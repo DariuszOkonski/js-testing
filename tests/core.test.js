@@ -192,7 +192,7 @@ describe('validateUserInput v2', () => {
   });
 });
 
-describe('isPriceInRange', () => {
+describe('isPriceInRange v1', () => {
   it.each([
     { price: -10, min: 0, max: 100, result: false },
     { price: 200, min: 0, max: 100, result: false },
@@ -219,6 +219,18 @@ describe('isPriceInRange', () => {
   // it('should return true when the price is within the range', () => {
   //   expect(isPriceInRange(10, 0, 100)).toBe(true);
   // });
+});
+
+describe('isPriceInRange v2', () => {
+  it.each([
+    { scenario: 'price < min', price: -10, result: false },
+    { scenario: 'price = min', price: 0, result: true },
+    { scenario: 'price between min and max', price: 50, result: true },
+    { scenario: 'price > max', price: 200, result: false },
+    { scenario: 'price = max', price: 100, result: true },
+  ])('should return $result when $scenario', ({ price, result }) => {
+    expect(isPriceInRange(price, 0, 100)).toBe(result);
+  });
 });
 
 describe('isValidUsername v1', () => {
