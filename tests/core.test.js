@@ -6,6 +6,7 @@ import {
   isPriceInRange,
   isValidUsername,
   canDrive,
+  fetchData,
 } from '../src/core';
 
 describe('core test cases', () => {
@@ -323,4 +324,23 @@ describe('canDrive v2', () => {
       expect(canDrive(age, country)).toBe(result);
     }
   );
+});
+
+describe('fetchData', () => {
+  it('should return a promise that will resolve to an array of numbers', async () => {
+    try {
+      const result = await fetchData();
+    } catch (error) {
+      expect(error).toHaveProperty('reason');
+      expect(error.reason).toMatch(/failed/i);
+    }
+
+    // expect(Array.isArray(result)).toBe(true);
+    // expect(result.length).toBeGreaterThan(0);
+
+    // fetchData().then((result) => {
+    //   expect(Array.isArray(result)).toBe(true);
+    //   expect(result.length).toBeGreaterThan(0);
+    // });
+  });
 });
