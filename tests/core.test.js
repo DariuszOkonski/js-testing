@@ -15,6 +15,7 @@ import {
   isValidUsername,
   canDrive,
   fetchData,
+  Stack,
 } from '../src/core';
 
 describe('core test cases', () => {
@@ -350,5 +351,65 @@ describe('fetchData', () => {
     //   expect(Array.isArray(result)).toBe(true);
     //   expect(result.length).toBeGreaterThan(0);
     // });
+  });
+});
+
+describe('Stack v1', () => {
+  it('should return one item', () => {
+    const stack = new Stack();
+    stack.push(1);
+    expect(stack.size()).toEqual(1);
+  });
+
+  it('should pop one item from stack', () => {
+    const stack = new Stack();
+
+    expect(stack.size()).toEqual(0);
+    stack.push(22);
+    expect(stack.size()).toEqual(1);
+    const poped = stack.pop();
+    expect(stack.size()).toEqual(0);
+    expect(poped).toBe(22);
+  });
+
+  it('should thrown error if empty array when pop', () => {
+    const stack = new Stack();
+    expect(() => stack.pop()).toThrowError(/stack is empty/i);
+  });
+
+  it('should peek top item', () => {
+    const stack = new Stack();
+
+    expect(stack.size()).toEqual(0);
+    stack.push(22);
+    expect(stack.size()).toEqual(1);
+    const peeked = stack.peek();
+    expect(stack.size()).toEqual(1);
+    expect(peeked).toBe(22);
+  });
+
+  it('should thrown error if empty array when peek', () => {
+    const stack = new Stack();
+    expect(() => stack.peek()).toThrowError(/stack is empty/i);
+  });
+
+  it('should check if empty', () => {
+    const stack = new Stack();
+    expect(stack.isEmpty()).toBe(true);
+  });
+
+  it('should return size', () => {
+    const stack = new Stack();
+    expect(stack.size()).toEqual(0);
+  });
+
+  it('should clear array', () => {
+    const stack = new Stack();
+
+    stack.push(1);
+    stack.push(2);
+    expect(stack.size()).toEqual(2);
+    stack.clear();
+    expect(stack.size()).toEqual(0);
   });
 });
