@@ -1,8 +1,10 @@
 import { vi, it, expect, describe } from 'vitest';
-import { getPriceInCurrency } from '../src/mocking';
+import { getPriceInCurrency, getShippingInfo } from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
+import { getShippingQuote } from '../src/libs/shipping';
 
 vi.mock('../src/libs/currency.js');
+vi.mock('../src/libs/shipping.js');
 
 describe('test suite', () => {
   it('test case', async () => {
@@ -49,5 +51,37 @@ describe('getPriceInCurrency v1', () => {
     const price = getPriceInCurrency(10, 'ASD');
 
     expect(price).toBe(15);
+  });
+});
+
+describe('getShippingInfo v1', () => {
+  it('should return message if no quote', () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null);
+    const quote = getShippingInfo('USA');
+    expect(quote).toContain('Unavailable');
+  });
+
+  it('should return message with cost and days if there is quote', () => {
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2 });
+    const quote = getShippingInfo('USA');
+
+    expect(quote).toContain('$10');
+    expect(quote).toContain('2 Days');
+  });
+});
+
+describe('getShippingInfo v2', () => {
+  it('should return shipping unavailable if quote cannot be fetched', () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null);
+    const result = getShippingInfo('London');
+    expect(result).toMatch(/unavailable/i);
+  });
+
+  it('should return shipping info if quote can be fetched', () => {
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2 });
+    const result = getShippingInfo('London');
+    expect(result).toMatch('$10');
+    expect(result).toMatch(/2 days/i);
+    expect(result).toMatch(/shipping cost: \$10 \(2 days\)/i);
   });
 });
