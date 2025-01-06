@@ -1,4 +1,4 @@
-import { vi, it, expect, describe } from 'vitest';
+import { vi, it, expect, describe, beforeEach } from 'vitest';
 import { getExchangeRate } from '../src/libs/currency';
 import {
   getPriceInCurrency,
@@ -113,6 +113,11 @@ describe('submitOrder', () => {
 describe('signUp', () => {
   const email = 'name@domain.com';
 
+  // beforeEach(() => {
+  //   // vi.mocked(sendEmail).mockClear();
+  //   vi.clearAllMocks();
+  // });
+
   it('should return false if email is not valid', async () => {
     const result = await signUp('a');
 
@@ -128,7 +133,7 @@ describe('signUp', () => {
   it('should send the welcome email if email is valid', async () => {
     await signUp(email);
 
-    expect(sendEmail).toHaveBeenCalled();
+    expect(sendEmail).toHaveBeenCalledOnce();
     // expect(sendEmail).toHaveBeenCalledWith(email, 'Welcome aboard!');
 
     const args = vi.mocked(sendEmail).mock.calls[0];
