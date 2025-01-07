@@ -1,21 +1,13 @@
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-  beforeAll,
-  afterEach,
-  afterAll,
-} from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   calculateDiscount,
-  getCoupons,
-  validateUserInput,
-  isPriceInRange,
-  isValidUsername,
   canDrive,
   fetchData,
+  getCoupons,
+  isPriceInRange,
+  isValidUsername,
   Stack,
+  validateUserInput,
 } from '../src/core';
 
 describe('core test cases', () => {
@@ -58,10 +50,10 @@ describe('getCoupons v1', () => {
   });
 
   it('should return array with two objects', () => {
-    const mockArray = [
-      { code: 'SAVE20NOW', discount: 0.2 },
-      { code: 'DISCOUNT50OFF', discount: 0.5 },
-    ];
+    // const mockArray = [
+    //   { code: 'SAVE20NOW', discount: 0.2 },
+    //   { code: 'DISCOUNT50OFF', discount: 0.5 },
+    // ];
 
     const result = getCoupons();
 
@@ -338,7 +330,7 @@ describe('canDrive v2', () => {
 describe('fetchData', () => {
   it('should return a promise that will resolve to an array of numbers', async () => {
     try {
-      const result = await fetchData();
+      await fetchData();
     } catch (error) {
       expect(error).toHaveProperty('reason');
       expect(error.reason).toMatch(/failed/i);
