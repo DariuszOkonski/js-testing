@@ -213,7 +213,7 @@ describe('isPriceInRange v1', () => {
     'should return $result when the price $price between (min: $min, max: $max)',
     ({ price, min, max, result }) => {
       expect(isPriceInRange(price, min, max)).toBe(result);
-    }
+    },
   );
 
   // it('should return false when the price is outside the range', () => {
@@ -311,7 +311,7 @@ describe('canDrive v1', () => {
     'should return $result for age $age in the $country',
     ({ age, country, result }) => {
       expect(canDrive(age, country)).toBe(result);
-    }
+    },
   );
 });
 
@@ -331,7 +331,7 @@ describe('canDrive v2', () => {
     'should return $result for ($age, $country)',
     ({ age, country, result }) => {
       expect(canDrive(age, country)).toBe(result);
-    }
+    },
   );
 });
 
