@@ -1,4 +1,10 @@
 import { vi, it, expect, describe } from 'vitest';
+import { getPriceInCurrency, getShippingInfo } from '../src/mocking';
+import { getExchangeRate } from '../src/libs/currency';
+import { getShippingQuote } from '../src/libs/shipping';
+
+vi.mock('../src/libs/currency.js');
+vi.mock('../src/libs/shipping.js');
 
 describe('test suite', () => {
   it('test case', () => {
@@ -34,5 +40,35 @@ describe('test suite', () => {
 
     expect(sendText).toHaveBeenCalledWith('message');
     expect(result).toBe('ok');
+  });
+});
+
+describe('getPriceInCurrency', () => {
+  it('should return price in target currency', () => {
+    vi.mocked(getExchangeRate).mockReturnValue(1.5);
+    const price = getPriceInCurrency(10, 'AUD');
+
+    expect(price).toBe(15);
+    expect(getExchangeRate).toHaveBeenCalledOnce();
+  });
+});
+
+describe('getShippingInfo', () => {
+  it('should return shipping unavailable if no quote', () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null);
+    const result = getShippingInfo('UK');
+
+    expect(getShippingQuote).toHaveBeenCalledOnce();
+    expect(result).toMatch(/shipping unavailable/i);
+  });
+
+  it('should return shipping cost if quote is returned', () => {
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2 });
+    const result = getShippingInfo('UK');
+
+    expect(getShippingQuote).toHaveBeenCalledOnce();
+    expect(result).toMatch(/shipping cost/i);
+    expect(result).toMatch(/10/i);
+    expect(result).toMatch(/2 days/i);
   });
 });
