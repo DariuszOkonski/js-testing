@@ -15,7 +15,7 @@ describe('test suite', () => {
     expect(result).toMatch(/hello mosh/i);
   });
 
-  it('sendText', () => {
+  it('sendText V1', () => {
     const sendText = vi.fn();
     sendText.mockImplementation((message) => 'ok ' + message);
 
@@ -24,5 +24,15 @@ describe('test suite', () => {
     expect(sendText).toHaveBeenCalledOnce();
     expect(sendText).toHaveBeenCalledWith('foo');
     expect(result).toMatch(/ok/i);
+  });
+
+  it('sendText V2', () => {
+    const sendText = vi.fn();
+    sendText.mockReturnValue('ok');
+
+    const result = sendText('message');
+
+    expect(sendText).toHaveBeenCalledWith('message');
+    expect(result).toBe('ok');
   });
 });
