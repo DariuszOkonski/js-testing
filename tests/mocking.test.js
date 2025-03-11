@@ -14,4 +14,15 @@ describe('test suite', () => {
     expect(greet).toHaveBeenCalledWith('Mosh');
     expect(result).toMatch(/hello mosh/i);
   });
+
+  it('sendText', () => {
+    const sendText = vi.fn();
+    sendText.mockImplementation((message) => 'ok ' + message);
+
+    const result = sendText('foo');
+
+    expect(sendText).toHaveBeenCalledOnce();
+    expect(sendText).toHaveBeenCalledWith('foo');
+    expect(result).toMatch(/ok/i);
+  });
 });
