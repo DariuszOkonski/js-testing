@@ -3,14 +3,17 @@ import {
   getPriceInCurrency,
   getShippingInfo,
   renderPage,
+  submitOrder,
 } from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
 import { getShippingQuote } from '../src/libs/shipping';
 import { trackPageView } from '../src/libs/analytics';
+import { charge } from '../src/libs/payment';
 
 vi.mock('../src/libs/currency.js');
 vi.mock('../src/libs/shipping.js');
 vi.mock('../src/libs/analytics.js');
+vi.mock('../src/libs/payment.js');
 
 describe('test suite', () => {
   it('test case', () => {
@@ -122,7 +125,38 @@ describe('renderPage v2', () => {
   it('should check if return value is proper', async () => {
     const result = await renderPage();
 
-    console.log(result);
     expect(result).toMatch(/content/i);
+  });
+});
+
+describe('submitOrder', () => {
+  const creditCardInfo = {
+    creditCardNumber: '10',
+  };
+
+  const order = {
+    totalAmount: '20',
+  };
+
+  it('should return error object if paymentResult status failed', async () => {
+    vi.mocked(charge).mockResolvedValue({ status: 'failed' });
+    const result = await submitOrder(order, creditCardInfo);
+
+    expect(result).toEqual({ success: false, error: 'payment_error' });
+  });
+
+  it('should return success object if paymentResult status success', async () => {
+    vi.mocked(charge).mockResolvedValue({ status: 'success' });
+    const result = await submitOrder(order, creditCardInfo);
+
+    expect(result).toEqual({ success: true });
+  });
+
+  it('should check if charge method has been called', async () => {
+    vi.mocked(charge).mockResolvedValue({ status: 'success' });
+    await submitOrder(order, creditCardInfo);
+
+    expect(charge).toHaveBeenCalledOnce();
+    expect(charge).toHaveBeenCalledWith({ creditCardNumber: '10' }, '20');
   });
 });
