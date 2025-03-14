@@ -53,7 +53,7 @@ describe('getPriceInCurrency', () => {
   });
 });
 
-describe('getShippingInfo', () => {
+describe('getShippingInfo V1', () => {
   it('should return shipping unavailable if no quote', () => {
     vi.mocked(getShippingQuote).mockReturnValue(null);
     const result = getShippingInfo('UK');
@@ -69,6 +69,24 @@ describe('getShippingInfo', () => {
     expect(getShippingQuote).toHaveBeenCalledOnce();
     expect(result).toMatch(/shipping cost/i);
     expect(result).toMatch(/10/i);
+    expect(result).toMatch(/2 days/i);
+  });
+});
+
+describe('getShippingInfo V2', () => {
+  it('should return shipping unavailable if quote cannot be fetched', () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null);
+    const result = getShippingInfo('London');
+
+    expect(result).toMatch(/shipping unavailable/i);
+  });
+
+  it('should return shipping info if quote can be fetched', () => {
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 15, estimatedDays: 2 });
+    const result = getShippingInfo('London');
+
+    expect(result).toMatch(/shipping cost/i);
+    expect(result).toMatch('$15');
     expect(result).toMatch(/2 days/i);
   });
 });
