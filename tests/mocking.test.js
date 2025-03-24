@@ -160,3 +160,29 @@ describe('submitOrder', () => {
     expect(charge).toHaveBeenCalledWith({ creditCardNumber: '10' }, '20');
   });
 });
+
+describe('submitOrder V2', () => {
+  const order = { totalAmount: '10' };
+  const creditCard = { creditCardNumber: '11' };
+
+  it.skip('should return failed when payment is failed', async () => {
+    vi.mocked(charge).mockResolvedValue({ status: 'failed ' });
+    const result = await submitOrder(order, creditCard);
+
+    expect(result).toEqual({ success: false, error: 'payment_error' });
+  });
+
+  it('should charge the customer', async () => {
+    vi.mocked(charge).mockResolvedValue({ success: 'success' });
+    await submitOrder(order, creditCard);
+
+    expect(charge).toHaveBeenCalledWith(creditCard, order.totalAmount);
+  });
+
+  it('should return success when payment is successful', async () => {
+    vi.mocked(charge).mockResolvedValue({ status: 'success' });
+    const result = await submitOrder(order, creditCard);
+
+    expect(result).toEqual({ success: true });
+  });
+});
