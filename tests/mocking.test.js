@@ -3,17 +3,26 @@ import {
   getPriceInCurrency,
   getShippingInfo,
   renderPage,
+  signUp,
   submitOrder,
 } from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
 import { getShippingQuote } from '../src/libs/shipping';
 import { trackPageView } from '../src/libs/analytics';
 import { charge } from '../src/libs/payment';
+import { sendEmail } from '../src/libs/email';
 
 vi.mock('../src/libs/currency.js');
 vi.mock('../src/libs/shipping.js');
 vi.mock('../src/libs/analytics.js');
 vi.mock('../src/libs/payment.js');
+vi.mock('../src/libs/email.js', async (importOriginal) => {
+  const originalModule = await importOriginal();
+  return {
+    ...originalModule,
+    sendEmail: vi.fn(),
+  };
+});
 
 describe('test suite', () => {
   it('test case', () => {
@@ -184,5 +193,29 @@ describe('submitOrder V2', () => {
     const result = await submitOrder(order, creditCard);
 
     expect(result).toEqual({ success: true });
+  });
+});
+
+describe('signUp V1', () => {
+  const email = 'name@domain.com';
+  it('should return false if email is not valid', async () => {
+    const result = await signUp('a');
+    expect(result).toBe(false);
+  });
+
+  it('should return true if email is valid', async () => {
+    const result = await signUp(email);
+    expect(result).toBe(true);
+  });
+
+  it('should send the welcome email if email is valid', async () => {
+    await signUp(email);
+
+    expect(sendEmail).toHaveBeenCalledOnce();
+    expect(sendEmail).toHaveBeenCalledWith(email, 'Welcome aboard!');
+
+    const args = vi.mocked(sendEmail).mock.calls[0];
+    expect(args[0]).toBe(email);
+    expect(args[1]).toMatch(/welcome/i);
   });
 });
