@@ -1,5 +1,6 @@
 import { vi, it, expect, describe, beforeEach } from 'vitest';
 import {
+  getDiscount,
   getPriceInCurrency,
   getShippingInfo,
   isOnline,
@@ -255,5 +256,23 @@ describe('isOnline', () => {
 
     vi.setSystemTime('2024-01-01 19:59');
     expect(isOnline()).toBe(true);
+  });
+});
+
+describe('getDiscount', () => {
+  it('should return .2 on Christmas day', () => {
+    vi.setSystemTime('2024-12-25 00:01');
+    expect(getDiscount()).toBe(0.2);
+
+    vi.setSystemTime('2024-12-25 23:59');
+    expect(getDiscount()).toBe(0.2);
+  });
+
+  it('should return 0 on any other day', () => {
+    vi.setSystemTime('2024-12-24 00:01');
+    expect(getDiscount()).toBe(0);
+
+    vi.setSystemTime('2024-12-26 00:01');
+    expect(getDiscount()).toBe(0);
   });
 });
